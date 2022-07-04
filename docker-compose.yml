@@ -2,8 +2,9 @@ version: '3.9'
 
 services:
 
-  back:
+  backend:
     build: ./src/Docker/back-end
+    container_name: 'app_backend'
     ports:
       -3001:3001
     volumes:
@@ -19,9 +20,13 @@ services:
       test: ["CMD", "lsof", "-t", "-i:3001"]
       timeout: 10s
       retries: 5
+    depends_on:
+      dataDb:
+        condition: service_healthy
 
-  front:
+  frontend:
     build: ./src/Docker/front-end
+    container_name: 'app_frontend'
     ports:
       -3000:3000
     depends_on:
@@ -33,7 +38,7 @@ services:
     image: mysql:8.0.21
     container_name: "mysql_db"
     ports:
-      - 3606:3306
+      - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=password
     restart: 'always'
