@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+
+  back:
+    build: ./src/Docker/back-end
+    ports:
+      -3001:3001
+    volumes:
+      - ./src/Docker/back-end:/app/back
+    environment:
+      - PORT=3001
+      - DB_USER=root
+      - DB_PASS=password
+      - DB_HOST=db
+      - DB_NAME=to_do_list
+      - DB_PORT=3306
+    healthcheck:
+      test: ["CMD", "lsof", "-t", "-i:3001"]
+      timeout: 10s
+      retries: 5
+
+  front:
+    build: ./src/Docker/front-end
+    ports:
+      -3000:3000
+    depends_on:
+      back:
+        condition: service_healthy
+    command: npm start    
+
+  dataDb:
+    image: mysql:8.0.21
+    container_name: "mysql_db"
+    ports:
+      - 3606:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    restart: 'always'
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"] # Deve aguardar o banco ficar operacional
+      timeout: 10s
+      retries: 5
+    cap_add:
+      - SYS_NICE # Deve omitir alertas menores
