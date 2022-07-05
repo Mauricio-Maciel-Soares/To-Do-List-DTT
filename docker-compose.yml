@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+
+  backend:
+    build: ./back-end
+    container_name: 'app_backend'
+    ports:
+      -3001:3001
+    volumes:
+      - ./back-end:/app/back
+    environment:
+      - PORT=3001
+      - DB_USER=root
+      - DB_PASS=password
+      - DB_HOST=db
+      - DB_NAME=to_do_list
+      - DB_PORT=3306
+    healthcheck:
+      test: ["CMD", "lsof", "-t", "-i:3001"]
+      timeout: 10s
+      retries: 5
+    depends_on:
+      dataDb:
+        condition: service_healthy
+
+  frontend:
+    build: ./front-end
+    container_name: 'app_frontend'
+    ports:
+      -3000:3000
+    depends_on:
+      back:
+        condition: service_healthy
+    command: npm start    
+
+  dataDb:
+    image: mysql:8.0.21
+    container_name: "mysql_db"
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+    restart: 'always'
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"] # Deve aguardar o banco ficar operacional
+      timeout: 10s
+      retries: 5
+    cap_add:
+      - SYS_NICE # Deve omitir alertas menores
