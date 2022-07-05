@@ -3,12 +3,12 @@ version: '3.9'
 services:
 
   backend:
-    build: ./src/Docker/back-end
+    build: ./back-end
     container_name: 'app_backend'
     ports:
       -3001:3001
     volumes:
-      - ./src/Docker/back-end:/app/back
+      - ./back-end:/app/back
     environment:
       - PORT=3001
       - DB_USER=root
@@ -25,7 +25,7 @@ services:
         condition: service_healthy
 
   frontend:
-    build: ./src/Docker/front-end
+    build: ./front-end
     container_name: 'app_frontend'
     ports:
       -3000:3000

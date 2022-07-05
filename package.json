@@ -2,7 +2,7 @@
   "name": "to-do-list-dtt",
   "version": "1.0.0",
   "description": "",
-  "main": "./src/app.js",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "test": "mocha tests",
@@ -21,24 +21,15 @@
   },
   "homepage": "https://github.com/Mauricio-Maciel-Soares/To-Do-List-DTT#readme",
   "dependencies": {
-    "@types/mysql": "^2.15.21",
-    "@types/node": "^18.0.1",
-    "@types/sequelize": "^4.28.13",
     "chai": "^4.3.6",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
-    "express": "^4.18.1",
     "http-status-code": "^2.1.0",
     "joi": "^17.6.0",
     "mocha": "^10.0.0",
-    "mysql2": "^2.3.3",
-    "sequelize": "^6.21.2",
-    "sequelize-cli": "^6.4.1",
     "sinon": "^14.0.0"
   },
   "devDependencies": {
-    "@types/express": "^4.17.13",
-    "mysql": "^2.18.1",
     "nodemon": "^2.0.18"
   }
 }
